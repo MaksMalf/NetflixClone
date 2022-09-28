@@ -59,7 +59,7 @@ class HomeViewController: UIViewController {
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil)
         ]
 
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .label
     }
 
     private func getTrendingMovies() {
@@ -72,8 +72,6 @@ class HomeViewController: UIViewController {
             }
         }
     }
-
-
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -154,7 +152,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         guard let header = view as? UITableViewHeaderFooterView else { return }
         var content = header.defaultContentConfiguration()
         content.textProperties.font = .systemFont(ofSize: 18, weight: .semibold)
-        content.textProperties.color = .white
+        content.textProperties.color = .label
         content.text = sectionTitles[section].lowercased()
         header.contentConfiguration = content
         header.frame = CGRect(x: header.bounds.origin.x + 20, y: header.bounds.origin.y, width: 100, height: header.bounds.height)
