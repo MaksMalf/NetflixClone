@@ -48,7 +48,7 @@ class TitleTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setConstraints() {
         NSLayoutConstraint.activate([
             titlesPosterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -72,5 +72,4 @@ class TitleTableViewCell: UITableViewCell {
         titlesPosterImageView.sd_setImage(with: url)
         titleLable.text = model.titleName
     }
-    
 }

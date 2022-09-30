@@ -38,8 +38,6 @@ class HomeViewController: UIViewController {
 
         let headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/2))
         homeFeedTable.tableHeaderView = headerView
-
-        getTrendingMovies()
     }
 
     override func viewDidLayoutSubviews() {
@@ -60,17 +58,6 @@ class HomeViewController: UIViewController {
         ]
 
         navigationController?.navigationBar.tintColor = .label
-    }
-
-    private func getTrendingMovies() {
-        APICaller.shared.getTrendingMovies { results in
-            switch results {
-            case .success(let result):
-                print(result)
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
 }
 
@@ -136,6 +123,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
+        
+        cell.delegate = self
 
         return cell
     }
@@ -162,10 +151,22 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         sectionTitles[section].lowercased()
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let defaultOffset = view.safeAreaInsets.top
-        let offset = scrollView.contentOffset.y + defaultOffset
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let defaultOffset = view.safeAreaInsets.top
+//        let offset = scrollView.contentOffset.y + defaultOffset
+//
+//        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
+//    }
+}
 
-        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
+extension HomeViewController: CollectionViewTableViewCellDelegate {
+    
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
+        
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(with: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
