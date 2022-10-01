@@ -16,6 +16,9 @@ enum Sections: Int {
 }
 
 class HomeViewController: UIViewController {
+    
+    private var randomTrendingMovie: Title?
+    private var headerView: HeroHeaderView?
 
     let sectionTitles = ["Trending Movies", "Trending TV", "Popular", "Upcoming Movies", "Top rated"]
 
@@ -24,6 +27,8 @@ class HomeViewController: UIViewController {
         table.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
         return table
     }()
+    
+    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +41,10 @@ class HomeViewController: UIViewController {
 
         configureNavBar()
 
-        let headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/2))
+        headerView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/2))
         homeFeedTable.tableHeaderView = headerView
+        
+        configureHeroHearedView()
     }
 
     override func viewDidLayoutSubviews() {
@@ -59,7 +66,23 @@ class HomeViewController: UIViewController {
 
         navigationController?.navigationBar.tintColor = .label
     }
+    
+    private func configureHeroHearedView() {
+        
+        APICaller.shared.getTrendingMovies { [weak self] result in
+            switch result {
+            case .success(let titles):
+                let selectedTitles = titles.randomElement()
+                self?.randomTrendingMovie = selectedTitles
+                self?.headerView?.configure(with: TitleViewModel(titleName: selectedTitles?.original_title ?? "", posterURL: selectedTitles?.poster_path ?? ""))
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
@@ -158,6 +181,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 //        navigationController?.navigationBar.transform = .init(translationX: 0, y: min(0, -offset))
 //    }
 }
+
+// MARK: - CollectionViewTableViewCellDelegate
 
 extension HomeViewController: CollectionViewTableViewCellDelegate {
     
