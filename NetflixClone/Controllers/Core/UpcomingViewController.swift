@@ -58,7 +58,7 @@ extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = upcomingTable.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
         let title = titles[indexPath.row]
         let model = TitleViewModel(titleName: title.original_title ?? title.original_name ?? "Unknow title name", posterURL: title.poster_path ?? "")
         cell.configure(with: model)
@@ -66,7 +66,7 @@ extension UpcomingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        140
+        155
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
