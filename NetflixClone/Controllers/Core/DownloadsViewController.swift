@@ -23,10 +23,17 @@ class DownloadsViewController: UIViewController {
         title = "Downloads"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        
         view.addSubview(downloadTable)
+        
         downloadTable.delegate = self
         downloadTable.dataSource = self
+        
         fetchLocalStorageForDownload()
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("downloaded"), object: nil, queue: nil) { _ in
+            self.fetchLocalStorageForDownload()
+        }
     }
     
     override func viewDidLayoutSubviews() {
